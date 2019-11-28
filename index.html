@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<body>
+  <div class="topnav">
+    <a class="active" href="#home">Home</a>
+    <input type="text" placeholder="Search..">
+    <button type="submit">Submit</button>
+    <a href="#news">News</a>
+    <a href="#contact">Contact</a>
+    <a href="#about">About</a>
+  </div>
+
+  <ul>
+    {% for name in names %}
+      <li>{{ name }}</li>
+    {% endfor %}
+  </ul>
+  <br>
+  <ol>
+    {% for name in names %}
+      <li>{{ name }}</li>
+    {% endfor %}
+  </ol>
+</body>
+</html>
