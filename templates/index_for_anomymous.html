@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
+  <meta charset="utf-8">
+  <title>Regna Bootstrap Template</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Poppins:300,400,500,700" rel="stylesheet">
+
+  <!-- Bootstrap CSS File -->
+  <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Libraries CSS Files -->
+  <link href="lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="lib/animate/animate.min.css" rel="stylesheet">
+</head>
+<body>
+  <header id="header">
+    <div class="container">
+      <nav id="nav-menu-container">
+        <ul class="nav-menu">
+          <li class="menu-active"><a href="#hero">Home</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="#login">Log In</a></li>
+        </ul>
+      </nav><!-- #nav-menu-container -->
+    </div>
+  </header>
+
+  <!-- Site Page Generation -->
+  <section id="hero">
+    <div class="hero-container">
+      <h1>Welcome to Giftwrap</h1>
+      <h2>The world's premier shopping site</h2>
+      <a href="#about" class="btn-get-started">Get Started</a>
+    </div>
+  </section><!-- #hero -->
+  <main id="main">
+
+
+    <input type="text" placeholder="Search..">
+    <button type="submit">Submit</button>
+    <a href="#news">News</a>
+    <a href="#contact">Contact</a>
+    <a href="#about">About</a>
+  <ul>
+    {% for name in names %}
+      <li>{{ name }}</li>
+    {% endfor %}
+  </ul>
+  <br>
+  <ol>
+    {% for name in names %}
+      <li>{{ name }}</li>
+    {% endfor %}
+  </ol>
+
+
+
+</main>
+</body>
+</html>
