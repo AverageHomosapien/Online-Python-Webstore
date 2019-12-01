@@ -1,9 +1,3 @@
-/*
-  Theme Name: Regna
-  Theme URL: https://bootstrapmade.com/regna-bootstrap-onepage-template/
-  Author: BootstrapMade.com
-  License: https://bootstrapmade.com/license/
-*/
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
@@ -11,6 +5,7 @@ body {
   background: #fff;
   color: #666666;
   font-family: "Open Sans", sans-serif;
+  margin: 0px;
 }
 
 a {
@@ -141,6 +136,8 @@ h1, h2, h3, h4, h5, h6 {
   background: url(../img/hero-bg.jpg) top center;
   background-size: cover;
   position: relative;
+  border: 0;
+  padding: 0;
 }
 
 @media (min-width: 1024px) {
