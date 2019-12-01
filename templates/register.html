@@ -1,29 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css')}}">
-  <meta charset="utf-8">
-  <title>Regna Bootstrap Template</title>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <meta content="" name="keywords">
-  <meta content="" name="description">
+{% extends "no_head_base.html" %}
+{% block content %}
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Poppins:300,400,500,700" rel="stylesheet">
-
-</head>
-<body>
   <!-- Site Page Generation -->
   <section id="hero">
     <div class="hero-container">
       <h1>Welcome to GIFTWRAP</h1>
-      <h2>Please Log In</h2>
+      <h2>Please Log In or Register</h2>
       <a href="/loginform" class="btn-get-started">Log In</a>
-      <a href="/registerform" class="btn-get-started">Register</a>
+      <a href="/registrationform" class="btn-get-started">Register</a>
     </div>
   </section>
-  <main id="main">
-    <p>Hey sexy ladies</p>
-  </main>
 </body>
 </html>
+{% endblock %}

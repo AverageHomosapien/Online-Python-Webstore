@@ -1,0 +1,28 @@
+{% extends "no_head_base.html" %}
+{% block content %}
+
+  <!-- Site Page Generation -->
+  <section id="hero">
+    <div class="hero-container">
+      <h1>Welcome to GIFTWRAP</h1>
+      <h2>Please Log In Below</h2>
+      <div id="contact">
+        <form action = "" method="post" novalidate>
+          {{ form.hidden_tag() }}
+          <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size = 32)}}
+          </p>
+          <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size = 32)}}
+          </p>
+          <p>{{ form.submit() }}</p>
+        </form>
+        <a href="/register">Back</a>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
+{% endblock %}
