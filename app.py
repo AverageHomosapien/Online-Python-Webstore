@@ -1,44 +1,52 @@
 from flask import Flask, render_template, flash, redirect
-import flask_login
-from flask_login import current_user, LoginManager
-import forms
-from database import db
-from models import models
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_login import current_user, LoginManager
+import flask_login
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+import forms
+from models import User, Order, OrderItem, Item
 from common import db
 from config import Config
 from forms import RegistrationForm, LoginForm
-from __init__ import create_app
 
-app = create_app()
-db.app = app
-app.app_context().push()
-#db.app = app
-db.create_all(app=create_app())
+#session = Session()
+app = Flask(__name__, static_folder="static")
+app.config.from_object(Config)
 
-#app.config.from_object(Config)
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+#app.app_context().push()
 
 #db = SQLAlchemy(app)
-#migrate = Migrate(app, db)
 
-#db.app = app
-#db.create_all()
-#models.db.init_app(app)
-#with app.app_context():
-#    db.init_app(app)
-#    models.db.create_all()
+# u = Item(655)
+# db.session.add(u)
+# db.session.commit()
+#db.init_app(app)
+#u = User(username = 'silly', email = 'mail.com', password_hash = 'dwaynetherock', name = 'Dookie Smith', address = '8 beach road')
 
-u = models.User(username = 'John012', email = 'john@gmail.com', password_hash = 'dinkle', name = 'John Smith', address = '5 beach road')
-models.db.session.add(u)
-models.db.session.commit()
+
+def add_user():
+    u = User(username = 'John02', email = 'ginger@gmail.com', password_hash = 'dinkladd', name = 'Joseph Smith', address = '8 beach road')
+    db.session.add(u)
+    db.session.commit()
+
+
+def rem_user():
+    u = User(username = 'John02', email = 'ginger@gmail.com', password_hash = 'dinkladd', name = 'Joseph Smith', address = '8 beach road')
+    db.session.query(u).delete()
+    db.session.commit()
+    #models.db.session.rollback()
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def names():
+    add_user()
     return render_template("index.html")
 
 # Register/Login Page
@@ -107,4 +115,10 @@ def load_user(user_id):
     return User.get(user_id)
 
 if __name__ == '__main__':
-        app.run(debug=True)
+    db.init_app(app)
+
+    @app.before_first_request
+    def create_tables():
+        db.create_all()
+
+    app.run(port=5000, debug=True)

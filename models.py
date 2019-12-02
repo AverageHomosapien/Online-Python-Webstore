@@ -1,6 +1,6 @@
-from database.db import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+from common import db
 
 class User(db.Model):
     __tablename__ = "users"
@@ -12,13 +12,13 @@ class User(db.Model):
     address = db.Column(db.String(160))
     orders = db.relationship('Order', backref='ordered', lazy='dynamic')
 
-    #def __init__(self, username, email, password_hash, name, address):
-    #    self.username = username
-    #    self.password_hash = password_hash
+    def __init__(self, username, email, password_hash, name, address):
+        self.username = username
+        self.password_hash = password_hash
     #    #self.password = set_password(password)
-    #    self.email = email
-    #    self.name = name
-    #    self.address = address
+        self.email = email
+        self.name = name
+        self.address = address
     #    self.save_to_db()
 
     def __repr__(self):
@@ -53,6 +53,9 @@ class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Float)
     ordered = db.relationship('OrderItem', backref='ordered', lazy='dynamic')
+
+    def __init__(self, amount):
+        self.amount = amount
 
     def __repr__(self):
         return '<Item {}>'.format(self.id)
