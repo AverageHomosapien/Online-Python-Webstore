@@ -32,10 +32,12 @@ login_manager.init_app(app)
 
 
 def add_user():
-    u = User(username = 'John02', email = 'ginger@gmail.com', password_hash = 'dinkladd', name = 'Joseph Smith', address = '8 beach road')
-    db.session.add(u)
-    db.session.commit()
-
+    try:
+        u = User(username = 'John02', email = 'ginger@gmail.com', password_hash = 'dinkladd', name = 'Joseph Smith', address = '8 beach road')
+        db.session.add(u)
+        db.session.commit()
+    except:
+        print("Invalid user attempted to be added to the database")
 
 def rem_user():
     u = User(username = 'John02', email = 'ginger@gmail.com', password_hash = 'dinkladd', name = 'Joseph Smith', address = '8 beach road')
