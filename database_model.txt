@@ -1,20 +1,15 @@
-from database.db import db
 
-class UserModel(db.Model):
-    __tablename__ = "users"
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80))
-    password = db.Column(db.String())
 
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
+
+
+    def set_password(self, password):
+        self.password_has = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def json(self):
-        return {
-            "id": self.id,
-            "username": self.username
-        }, 200
+        return {"id": self.id, "username": self.username}, 200
 
     # Method to save user to DB
     def save_to_db(self):
