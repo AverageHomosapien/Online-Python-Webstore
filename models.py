@@ -2,6 +2,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from common import db
 
+# User DB
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
@@ -12,25 +13,27 @@ class User(db.Model):
     address = db.Column(db.String(160))
     orders = db.relationship('Order', backref='ordered', lazy='dynamic')
 
-    def __init__(self, username, email, password_hash, name, address):
+    def __init__(self, username, email, password, name, address):
         self.username = username
-        self.password_hash = password_hash
-    #    #self.password = set_password(password)
         self.email = email
         self.name = name
         self.address = address
-    #    self.save_to_db()
+        self.set_password(password)
+
+    # hashes the password and saves to user
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    # checks the password to see if it's valid or not
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
-    # Method to save user to DB
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
 
 
-
+# Order DB
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Float)
@@ -38,9 +41,14 @@ class Order(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     bought = db.relationship('OrderItem', backref='items', lazy='dynamic')
 
+    def __init__(self, amount, user_id):
+        self.amount = amount
+
+
     def __repr__(self):
         return '<Order {}>'.format(self.id)
 
+# Order Item DB
 class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
@@ -49,6 +57,7 @@ class OrderItem(db.Model):
     def __repr__(self):
         return '<Order {}>'.format(self.id)
 
+# Item DB
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Float)

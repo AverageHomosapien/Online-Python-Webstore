@@ -11,44 +11,34 @@ from models import User, Order, OrderItem, Item
 from common import db
 from config import Config
 from forms import RegistrationForm, LoginForm
+from datetime import datetime
 
-#session = Session()
 app = Flask(__name__, static_folder="static")
 app.config.from_object(Config)
-
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-#app.app_context().push()
-
-#db = SQLAlchemy(app)
-
-# u = Item(655)
-# db.session.add(u)
-# db.session.commit()
-#db.init_app(app)
-#u = User(username = 'silly', email = 'mail.com', password_hash = 'dwaynetherock', name = 'Dookie Smith', address = '8 beach road')
-
-
-def add_user():
+def add_user(username, email, password, name, address):
     try:
-        u = User(username = 'John02', email = 'ginger@gmail.com', password_hash = 'dinkladd', name = 'Joseph Smith', address = '8 beach road')
+        u = User(username, email, password, name, address)
         db.session.add(u)
         db.session.commit()
     except:
-        print("Invalid user attempted to be added to the database")
+        print(datetime.utcnow().strftime("%a %b %d %H:%M:%S %Z %Y") + " - Invalid user (" + username + ") attempted to be added to the database")
 
-def rem_user():
-    u = User(username = 'John02', email = 'ginger@gmail.com', password_hash = 'dinkladd', name = 'Joseph Smith', address = '8 beach road')
-    db.session.query(u).delete()
-    db.session.commit()
-    #models.db.session.rollback()
+def remove_user(username):
+    try:
+        u = User(username = 'John02', email = 'ginger@gmail.com', password_hash = 'dinkladd', name = 'Joseph Smith', address = '8 beach road')
+        db.session.query(u).delete()
+        db.session.commit()
+    except:
+        print(datetime.utcnow().strftime("%a %b %d %H:%M:%S %Z %Y") + " - Invalid user (" + username + ") attempted to be removed from the database")
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def names():
-    add_user()
+    add_user('John02', 'ginger@gmail.com', 'dinkladd', 'Joseph Smith', '8 beach road')
     return render_template("index.html")
 
 # Register/Login Page
