@@ -88,6 +88,15 @@ def selling():
 
 @app.route('/category', methods=['GET', 'POST'])
 def category():
+    print("Count of distinct items is ")
+    count = 1
+    item_ids = []
+    item_categories = []
+    for cat in Item.query.distinct(Item.category):
+        if cat.category not in item_categories:
+            item_categories.append(cat.category)
+            item_ids.append(count)
+        count+=1
     return render_template("category.html")
 
 @app.route('/basket', methods=['GET', 'POST'])
