@@ -5,6 +5,8 @@ import flask_login
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import os
+from pathlib import Path
 
 import forms
 from models import User, Order, OrderItem, Item
@@ -88,16 +90,23 @@ def selling():
 
 @app.route('/category', methods=['GET', 'POST'])
 def category():
-    print("Count of distinct items is ")
     count = 1
     item_ids = []
     item_categories = []
+    file_names = []
     for cat in Item.query.distinct(Item.category):
         if cat.category not in item_categories:
             item_categories.append(cat.category)
             item_ids.append(count)
         count+=1
-    return render_template("category.html")
+    for id in item_ids:
+        dir = os.path.join(app.config['ITEM_FOLDER'], str(id))
+        if Path(dir + ".jpg").is_file():
+            file_names.append(dir + ".jpg")
+        elif Path(dir + ".png").is_file():
+            file_names.append(dir + ".png")
+    #return render_template("category.html")
+    return render_template("category.html", categories = item_categories, files = file_names)
 
 @app.route('/basket', methods=['GET', 'POST'])
 def basket():

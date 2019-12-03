@@ -4,11 +4,19 @@
   <!-- Site Page Generation -->
   <section id="hero">
     <div class="hero-container">
-      <h1>Welcome to GIFTWRAP</h1>
-      <h2>The world's premier shopping site</h2>
-      <a href="/register" class="btn-get-started">Get Started</a>
+      <div class="gallery">
+        {% for i in range(categories|length)%}
+          <img src={files[i]} width = "600" height = 600>
+          <div class="desc">{categories[i]}</div>
+        {% endfor %}
+          <!--
+        {% for cat in categories%}
+
+        {% endfor %}
+          -->
+      </div>
     </div>
-  </section><!-- #hero -->
+  </section>
   <main id="main">
 </main>
 </body>
