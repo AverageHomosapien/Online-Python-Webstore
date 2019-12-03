@@ -32,7 +32,6 @@ class User(db.Model):
         return '<User {}>'.format(self.username)
 
 
-
 # Order DB
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -43,10 +42,11 @@ class Order(db.Model):
 
     def __init__(self, amount, user_id):
         self.amount = amount
-
+        self.user_id = user_id
 
     def __repr__(self):
         return '<Order {}>'.format(self.id)
+
 
 # Order Item DB
 class OrderItem(db.Model):
@@ -54,17 +54,28 @@ class OrderItem(db.Model):
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'))
 
+    def __init__(self, order_id, item_id):
+        self.order_id = order_id
+        self.item_id = item_id
+
     def __repr__(self):
         return '<Order {}>'.format(self.id)
+
 
 # Item DB
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80))
     amount = db.Column(db.Float)
+    category = db.Column(db.String(80))
+    quantity = db.Column(db.Integer)
     ordered = db.relationship('OrderItem', backref='ordered', lazy='dynamic')
 
-    def __init__(self, amount):
+    def __init__(self, name, amount, category, quantity):
+        self.name = name
         self.amount = amount
+        self.category = category
+        self.quantity = quantity
 
     def __repr__(self):
-        return '<Item {}>'.format(self.id)
+        return '<Item {}>'.format(self.name)

@@ -440,6 +440,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #mobile-nav ul .menu-has-children i.fa-chevron-up {
   color: #2dc997;
+  display: block;
 }
 
 #mobile-nav ul .menu-item-active {
