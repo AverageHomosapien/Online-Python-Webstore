@@ -1,9 +1,12 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from common import db
+from flask_login import UserMixin
+import flask
+#from app import login
 
 # User DB
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
@@ -30,6 +33,10 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+    #@login.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
 
 
 # Order DB
