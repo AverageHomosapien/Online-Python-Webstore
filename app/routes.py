@@ -3,6 +3,33 @@ from flask_login import current_user, login_required, login_user, logout_user
 from app.forms import RegistrationForm, LoginForm
 from app.models import User, Order, OrderItem, Item
 from app import app, db
+from datetime import datetime
+
+######### FUNCTIONS TO INTERACT WITH DATABASE
+
+# Adds user to the database
+def add_user(username, email, password, name, address):
+    try:
+        u = User(username, lower(email), password, name, address)
+        db.session.add(u)
+        db.session.commit()
+    except:
+        print_to_console(username + ") failed attempt to be added to the database")
+
+# Removes user from the database (untested)
+def remove_user(username):
+    try:
+        u = User(username = 'John02', email = 'ginger@gmail.com', password_hash = 'dinkladd', name = 'Joseph Smith', address = '8 beach road')
+        db.session.query(u).delete()
+        db.session.commit()
+    except:
+        print_to_console(username + ") failed attempt to be removed from the database")
+
+# Prints a message to the console with a timestamp
+def print_to_console(message):
+    print(datetime.utcnow().strftime("%a %b %d %H:%M:%S %Z %Y") + " - " + str(message))
+
+######## ROUTING FUNCTIONS
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])

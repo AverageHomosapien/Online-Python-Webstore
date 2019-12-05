@@ -10,3 +10,5 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     IMG_FOLDER = os.path.join('static', 'img')
     ITEM_FOLDER = os.path.join(IMG_FOLDER, 'items')
+    FLASK_APP = "app"
+    FLASK_ENV = "development"
