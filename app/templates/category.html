@@ -5,12 +5,16 @@
   <section id="hero">
     <br><br><br><br><br><br><br>
       {% for i in range(categories|length)%}
-      <div class="responsive">
-        <div class="gallery">
-          <img src="{{files[i]}}">
-          <div class="desc">{{categories[i]}}</div>
+        <div class="responsive">
+          <div class="gallery">
+            <img src="{{files[i]}}">
+            <!--<div class="desc"><a href="/category/{{categories[i]}}.html">{{categories[i]}}</a></div>-->
+            <div class="desc">
+              <!--<a href="{{'127.0.0.1:5000/category/%s'%categories[i]}}">{{categories[i]}}</a>-->
+              <a href="{{ url_for('category/%s'%categories[i])}}">{{categories[i]}}</a>-->
+            </div>
+          </div>
         </div>
-      </div>
       {% endfor %}
   </section>
   <main id="main">

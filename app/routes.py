@@ -116,6 +116,7 @@ def selling():
         return redirect('/register')
     return render_template("selling.html")
 
+@app.route('/category/<type>', methods=['GET', 'POST'])
 @app.route('/category', methods=['GET', 'POST'])
 def category():
     if not current_user.is_authenticated:
