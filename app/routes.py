@@ -4,6 +4,7 @@ from app.forms import RegistrationForm, LoginForm
 from app.models import User, Order, OrderItem, Item
 from app import app, db
 from datetime import datetime
+import os
 
 ######### FUNCTIONS TO INTERACT WITH DATABASE
 
@@ -125,9 +126,9 @@ def category():
         count+=1
     for id in item_ids:
         dir = os.path.join(app.config['ITEM_FOLDER'], str(id))
-        if Path(dir + ".jpg").is_file():
+        if os.path.isfile(dir + ".jpg"):
             file_names.append(dir + ".jpg")
-        elif Path(dir + ".png").is_file():
+        elif os.path.isfile(dir + ".png"):
             file_names.append(dir + ".png")
     #return render_template("category.html")
     return render_template("category.html", categories = item_categories, files = file_names)
