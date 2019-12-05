@@ -1,9 +1,8 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
-from common import db
 from flask_login import UserMixin
 import flask
-#from app import login
+from app import db, login
 
 # User DB
 class User(UserMixin, db.Model):
@@ -34,7 +33,7 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
-    #@login.user_loader
+    @login.user_loader
     def load_user(id):
         return User.query.get(int(id))
 
