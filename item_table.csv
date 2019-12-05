@@ -1,12 +1,13 @@
 id,name,amount,category,quantity
-1,wooden horse,320.0,toys,4
+1,wooden horse,320,toys,4
 2,basketball,12.95,sports,23
 3,football,11.99,sports,33
 4,iPhone X,659.99,technology,12
-5,Samsung S9,589.99,technology,11
+5,Nintendo Switch,450.99,technology,9
 6,Nokia 3310,80.95,technology,3
-7,Huawei P10,475.0,technology,7
-8,baseball bat,27.0,sports,13
-9,cricket bat,35.0,sports,16
-10,doll house,135.0,toys,2
+7,Huawei P10,475,technology,7
+8,baseball bat,27,sports,13
+9,cricket bat,35,sports,16
+10,doll house,135,toys,2
 11,hula hoop,16.99,toys,21
+12,Samsung S9,589.99,technology,11

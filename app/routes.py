@@ -5,8 +5,11 @@ from app.models import User, Order, OrderItem, Item
 from app import app, db
 from datetime import datetime
 import os
+from pathlib import Path
 
-######### FUNCTIONS TO INTERACT WITH DATABASE
+#######################################
+# Functions to interact with Database #
+#######################################
 
 # Adds user to the database
 def add_user(username, email, password, name, address):
@@ -30,7 +33,9 @@ def remove_user(username):
 def print_to_console(message):
     print(datetime.utcnow().strftime("%a %b %d %H:%M:%S %Z %Y") + " - " + str(message))
 
-######## ROUTING FUNCTIONS
+#####################
+# Routing functions #
+#####################
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -126,11 +131,10 @@ def category():
         count+=1
     for id in item_ids:
         dir = os.path.join(app.config['ITEM_FOLDER'], str(id))
-        if os.path.isfile(dir + ".jpg"):
-            file_names.append(dir + ".jpg")
-        elif os.path.isfile(dir + ".png"):
-            file_names.append(dir + ".png")
-    #return render_template("category.html")
+        if os.path.exists(dir + ".jpg"):
+            file_names.append("static/img/items/" + str(id) + ".jpg")
+        elif os.path.exists(dir + ".png"):
+            file_names.append("static/img/items/" + str(id) + ".png")
     return render_template("category.html", categories = item_categories, files = file_names)
 
 @app.route('/basket', methods=['GET', 'POST'])
