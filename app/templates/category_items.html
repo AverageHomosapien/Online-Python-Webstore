@@ -1,8 +1,7 @@
-{% extends "base.html" %}
+{% extends "base_lvl_one.html" %}
 {% block content %}
 
     <br><br><br><br><br><br>
-    
       {% for i in range(categories|length)%}
         <a href="category/{{categories[i]}}">
           <div class="gallery">
@@ -13,9 +12,8 @@
           </div>
         </a>
       {% endfor %}
-
   <main id="main">
-</main>
+  </main>
 </body>
 </html>
 

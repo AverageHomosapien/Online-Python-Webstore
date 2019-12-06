@@ -34,7 +34,7 @@ h1, h2, h3, h4, h5, h6 {
 # Header
 --------------------------------------------------------------*/
 #header {
-  padding-top: 30px;
+  padding-top: 20px;
   background: rgba(0, 0, 0, 0.6);
   height: 92px;
   position: fixed;
@@ -46,34 +46,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #header #logo {
   float: left;
-}
-
-#header #logo h1 {
-  font-size: 36px;
-  margin: 0;
-  padding: 6px 0;
-  line-height: 1;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-}
-
-#header #logo h1 a, #header #logo h1 a:hover {
-  color: #fff;
-}
-
-#header #logo img {
-  padding: 0;
-  margin: 0;
-}
-
-@media (max-width: 768px) {
-  #header #logo h1 {
-    font-size: 26px;
-  }
-  #header #logo img {
-    max-height: 40px;
-  }
+  padding-left: 15px;
 }
 
 #header.header-fixed {
@@ -102,7 +75,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #hero:before {
   content: "";
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.2);
   position: absolute;
   bottom: 0;
   top: 0;
@@ -179,7 +152,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Nav Menu Essentials */
 .nav-menu, .nav-menu * {
   margin: 0;
-  padding: 0;
+  padding: 10px 0 0 0;
   list-style: none;
 }
 

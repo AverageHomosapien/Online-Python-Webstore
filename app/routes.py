@@ -128,27 +128,47 @@ def selling():
     return render_template("selling.html")
 
 @app.route('/category', methods=['GET', 'POST'])
-@app.route('/category/<string:type>', methods=['GET', 'POST'])
-def category():
+@app.route('/category/<type>', methods=['GET', 'POST'])
+def category(type=""):
     if not current_user.is_authenticated:
         return redirect('/register')
-    count = 1
-    item_ids = []
-    item_categories = []
-    file_names = []
-    for cat in Item.query.distinct(Item.category):
-        if cat.category not in item_categories:
-            item_categories.append(cat.category)
-            item_ids.append(count)
-        count+=1
-    for id in item_ids:
-        dir = os.path.join(app.config['ITEM_FOLDER'], str(id))
-        ext = check_img_extension(dir)
-        if ext == "":
-            print("THERE IS A BLOODY ERROR")
-        else:
-            file_names.append("static/img/items/" + str(id) + ext)
-    return render_template("category.html", categories = item_categories, files = file_names)
+    if type == "": # If category hasn't been selected yet
+        count = 1
+        item_ids = []
+        item_categories = []
+        file_names = []
+        for cat in Item.query.distinct(Item.category):
+            if cat.category not in item_categories:
+                item_categories.append(cat.category)
+                item_ids.append(count)
+                dir = os.path.join(app.config['ITEM_FOLDER'], str(count))
+                ext = check_img_extension(dir)
+                if ext == "": # Remove from list
+                    item_categories.pop()
+                    item_ids.pop()
+                else:
+                    file_names.append("static/img/items/" + str(count) + ext)
+            count+=1
+        return render_template("category.html", categories = item_categories, files = file_names)
+    else: # if category has been selected
+        count = 1
+        item_ids = []
+        file_names = []
+        items = []
+        type = str(type)
+        for cat in Item.query.distinct(Item.category):
+            if cat.category == type:
+                item_ids.append(count)
+                items.append(cat.name)
+                dir = os.path.join(app.config['ITEM_FOLDER'], str(count))
+                ext = check_img_extension(dir)
+                if ext == "": # Remove from list
+                    item_categories.pop()
+                    item_ids.pop()
+                else:
+                    file_names.append("../static/img/items/" + str(count) + ext)
+            count+=1
+        return render_template("category_items.html", categories = items, files = file_names)
 
 @app.route('/basket', methods=['GET', 'POST'])
 def basket():
