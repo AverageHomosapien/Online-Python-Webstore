@@ -14,7 +14,7 @@ from pathlib import Path
 # Adds user to the database
 def add_user(username, email, password, name, address):
     try:
-        u = User(username, lower(email), password, name, address)
+        u = User(username, email, password, name, address)
         db.session.add(u)
         db.session.commit()
     except:
@@ -40,6 +40,8 @@ def print_to_console(message):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def names():
+    if not current_user.is_authenticated:
+        return redirect('/register')
     return render_template("index.html")
 
 # Register/Login Page
@@ -80,8 +82,8 @@ def registration_form():
         return redirect('/index')
     form = RegistrationForm()
     if form.is_submitted():
-        print("submitted!!")
         flash('Registration requested for user {}, remember_me={}'.format(form.username.data, form.email.data, form.password.data, form.name.data, form.address.data))
+        add_user(form.username.data, form.email.data, form.password.data, form.name.data, form.address.data)
         return redirect('/index')
     return render_template('registration_form.html', form=form)
 
@@ -116,8 +118,8 @@ def selling():
         return redirect('/register')
     return render_template("selling.html")
 
-@app.route('/category/<type>', methods=['GET', 'POST'])
 @app.route('/category', methods=['GET', 'POST'])
+@app.route('/category/<string:type>', methods=['GET', 'POST'])
 def category():
     if not current_user.is_authenticated:
         return redirect('/register')
@@ -152,5 +154,6 @@ def checkout():
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
+    print_to_console(str(current_user) + " Logged Out")
     logout_user()
     return redirect('/register')
