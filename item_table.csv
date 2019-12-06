@@ -1,13 +1,34 @@
 id,name,amount,category,quantity
-1,wooden horse,320,toys,4
-2,basketball,12.95,sports,23
-3,football,11.99,sports,33
-4,iPhone X,659.99,technology,12
-5,Nintendo Switch,450.99,technology,9
+1,Wooden Horse,320,toys,4
+2,Basketball,12.95,sports,23
+3,Football,11.99,sports,33
+4,Nintendo Switch,450.99,technology,9
+5,iPhone X,659.99,technology,12
 6,Nokia 3310,80.95,technology,3
 7,Huawei P10,475,technology,7
-8,baseball bat,27,sports,13
-9,cricket bat,35,sports,16
-10,doll house,135,toys,2
-11,hula hoop,16.99,toys,21
+8,Baseball Bat,27,sports,13
+9,Cricket Bat,35,sports,16
+10,Doll House,135,toys,2
+11,Hula Hoop,16.99,toys,21
 12,Samsung S9,589.99,technology,11
+13,Listerine,9.99,personal hygiene,13
+14,Colgate Toothpaste,5.99,personal hygiene,25
+15,Toothbrush,8.69,personal hygiene,18
+16,Wheelbarrow,55,gardening,23
+17,Leaf Rake,18,gardening,21
+18,Hose Pipe,26,gardening,13
+19,Game of Thrones Books,44.49,books,9
+20,Ranger's Apprentice Books,39.99,books,14
+21,Mechanical Pencils,1.89,office supplies,16
+22,Erasers,4.65,office supplies,17
+23,Sticky Notes,3.99,office supplies,20
+24,Stapler,4.99,office supplies,16
+25,Keyboard,180.49,music instruments,15
+26,Electric Guitar,219.99,music instruments,2
+27,Flute,85,music instruments,12
+28,Violin,145.49,music instruments,13
+29,Ant Man,7.6,cds and dvds,10
+30,Ted Collection,12.49,cds and dvds,7
+31,Office Chair,78.99,furniture,5
+32,Desk,183.49,furniture,13
+33,Side Table,40.99,furniture,11

@@ -33,6 +33,16 @@ def remove_user(username):
 def print_to_console(message):
     print(datetime.utcnow().strftime("%a %b %d %H:%M:%S %Z %Y") + " - " + str(message))
 
+# Checks to see if an image string (without extension) exists by checking image with various file extensions
+def check_img_extension(file_string):
+    if os.path.exists(file_string + ".jpg"):
+        return ".jpg"
+    elif os.path.exists(file_string + ".png"):
+        return ".png"
+    elif os.path.exists(file_string + ".gif"):
+        return ".gif"
+    return ""
+
 #####################
 # Routing functions #
 #####################
@@ -133,10 +143,11 @@ def category():
         count+=1
     for id in item_ids:
         dir = os.path.join(app.config['ITEM_FOLDER'], str(id))
-        if os.path.exists(dir + ".jpg"):
-            file_names.append("static/img/items/" + str(id) + ".jpg")
-        elif os.path.exists(dir + ".png"):
-            file_names.append("static/img/items/" + str(id) + ".png")
+        ext = check_img_extension(dir)
+        if ext == "":
+            print("THERE IS A BLOODY ERROR")
+        else:
+            file_names.append("static/img/items/" + str(id) + ext)
     return render_template("category.html", categories = item_categories, files = file_names)
 
 @app.route('/basket', methods=['GET', 'POST'])
