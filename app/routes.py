@@ -152,23 +152,25 @@ def category(type=""):
         return render_template("category.html", categories = item_categories, files = file_names)
     else: # if category has been selected
         count = 1
-        item_ids = []
-        file_names = []
-        items = []
+        item_ids, file_names, items, item_price, item_quantity = [], [], [], [], []
         type = str(type)
         for cat in Item.query.distinct(Item.category):
             if cat.category == type:
                 item_ids.append(count)
                 items.append(cat.name)
+                item_price.append(cat.amount)
+                item_quantity.append(cat.quantity)
                 dir = os.path.join(app.config['ITEM_FOLDER'], str(count))
                 ext = check_img_extension(dir)
                 if ext == "": # Remove from list
                     item_categories.pop()
                     item_ids.pop()
+                    item_price.pop()
+                    item_quantity.pop()
                 else:
                     file_names.append("../static/img/items/" + str(count) + ext)
             count+=1
-        return render_template("category_items.html", categories = items, files = file_names)
+        return render_template("category_items.html", categories = items, files = file_names, quantity = item_quantity, price = item_price)
 
 @app.route('/basket', methods=['GET', 'POST'])
 def basket():

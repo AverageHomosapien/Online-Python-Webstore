@@ -1,20 +1,21 @@
 {% extends "base_lvl_one.html" %}
 {% block content %}
 
-    <br><br><br><br><br><br>
-      {% for i in range(categories|length)%}
-        <a href="category/{{categories[i]}}">
-          <div class="gallery">
-            <img src="{{files[i]}}">
-            <div class="desc">
-              {{categories[i]}}
-            </div>
-          </div>
-        </a>
-      {% endfor %}
-  <main id="main">
-  </main>
-</body>
-</html>
+  <a class="category_return" href="/category"><i>Back to browsing Item Categories</i></a><br>
+    {% for i in range(categories|length)%}
+      <div class="gallery-display">
+        <img src="{{files[i]}}">
+        <div class="gallery-desc">
+          <b>{{categories[i]}}</b>
+        </div>
+        <hr>
+        <div class="gallery-desc">
+          <br>
+          Price: £{{'%0.2f'%price[i]}}<br><br>
+          Quantity in Stock: {{quantity[i]}}<br><br>
+          Add to Basket:
+        </div>
+      </div>
+    {% endfor %}
 
 {% endblock %}
