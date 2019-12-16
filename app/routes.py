@@ -196,7 +196,10 @@ def basket():
 def checkout():
     if not current_user.is_authenticated:
         return redirect('/register')
-    return render_template("checkout.html", basket = [[2,3],[4,1],[5,8]])
+    return render_template("checkout.html", basket = [[2,3],[4,1],[5,2]],
+        categories = ["Basketball", "Nintendo Switch", "iPhone X"], cost = [12.95,450.99,659.99],
+        stock = [23, 9, 12], files = ["static/img/items/2.png", "static/img/items/4.jpg", "static/img/items/5.png"],
+        total_cost = 1809.82)
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
