@@ -194,12 +194,29 @@ def basket():
 
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
+    print("Checking out")
+    print(len(cart))
+    basket, name, cost, stock, files = [], [], [], [], []
+    total_cost = 0
     if not current_user.is_authenticated:
         return redirect('/register')
-    return render_template("checkout.html", basket = [[2,3],[4,1],[5,2]],
-        categories = ["Basketball", "Nintendo Switch", "iPhone X"], cost = [12.95,450.99,659.99],
-        stock = [23, 9, 12], files = ["static/img/items/2.png", "static/img/items/4.jpg", "static/img/items/5.png"],
-        total_cost = 1809.82)
+    for item in cart:
+        for db_item in Item.query.distinct(Item.id):
+            if item[0] == db_item.id:
+                name.append(db_item.name)
+                cost.append(db_item.amount)
+                stock.append(db_item.quantity)
+                print(app.config['ITEM_FOLDER'])
+                print(str(db_item.id))
+                temp_fp = app.config['ITEM_FOLDER'] + "\\" + str(db_item.id)
+                string = check_img_extension(temp_fp)
+                fp = "static/img/items/" + str(db_item.id) + string
+                files.append(fp)
+                total_cost += (cost[-1] * item[1])
+                print(name[-1])
+                print(files[-1])
+                break
+    return render_template("checkout.html", basket = cart, name = name, cost = cost, stock = stock, files = files, value = total_cost)
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
