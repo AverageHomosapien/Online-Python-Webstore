@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_required, login_user, logout_user
 from app.forms import RegistrationForm, LoginForm
 from app.models import User, Order, OrderItem, Item
@@ -6,6 +6,8 @@ from app import app, db
 from datetime import datetime
 import os
 from pathlib import Path
+
+cart = []
 
 #######################################
 # Functions to interact with Database #
@@ -127,7 +129,7 @@ def selling():
         return redirect('/register')
     return render_template("selling.html")
 
-@app.route('/category', methods=['GET', 'POST'])
+@app.route('/category', methods=['GET'])
 @app.route('/category/<type>', methods=['GET', 'POST'])
 def category(type=""):
     if not current_user.is_authenticated:
@@ -152,7 +154,7 @@ def category(type=""):
         return render_template("category.html", categories = item_categories, files = file_names)
     else: # if category has been selected
         count = 1
-        item_ids, file_names, items, item_price, item_quantity = [], [], [], [], []
+        item_ids, file_names, items, item_price, item_quantity, item_categories = [], [], [], [], [], []
         type = str(type)
         for cat in Item.query.distinct(Item.category):
             if cat.category == type:
@@ -170,7 +172,19 @@ def category(type=""):
                 else:
                     file_names.append("../static/img/items/" + str(count) + ext)
             count+=1
-        return render_template("category_items.html", categories = items, files = file_names, quantity = item_quantity, price = item_price)
+        if request.method == 'POST':
+            contained = False
+            item_count = 0
+            for item in items:
+                if item == request.form['button']:
+                    for product in cart:
+                        if item_ids[item_count] == product[0]:
+                            contained = True
+                            product[1] += 1
+                    if contained == False:
+                        cart.append([item_ids[item_count], 1])
+                item_count += 1
+        return render_template("category_items.html", categories = items, files = file_names, quantity = item_quantity, price = item_price, subcat = type)
 
 @app.route('/basket', methods=['GET', 'POST'])
 def basket():
@@ -182,7 +196,7 @@ def basket():
 def checkout():
     if not current_user.is_authenticated:
         return redirect('/register')
-    return render_template("checkout.html")
+    return render_template("checkout.html", basket = [[2,3],[4,1],[5,8]])
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():

@@ -1,16 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
 
-  <section id="hero">
-    <div class="hero-container">
-      <h1>Welcome to GIFTWRAP</h1>
-      <h2>The world's premier shopping site</h2>
-      <a href="/register" class="btn-get-started">Get Started</a>
+  <a class="category_return" href="/category"><i>Back to browsing Item Categories</i></a><br>
+  {% if basket|length <= 0 %}
+  <div class="gallery-display">
+    <div class="gallery-desc">
+      Please ensure there are items in your basket before you try and check out.
     </div>
-  </section>
-  <main id="main">
-</main>
-</body>
-</html>
+  </div>
+  {% else %}
+    {% for i in range(basket|length)%}
+      <div class="gallery-display">
+        <img src="{{files[i]}}">
+        <div class="gallery-desc">
+          <b>{{categories[i]}}</b>
+        </div>
+        <hr>
+        <div class="gallery-desc">
+          <br>
+          <b>Price:</b> £{{'%0.2f'%price[i]}}<br><br>
+          <b>Quantity in Stock:</b> {{quantity[i]}}<br><br>
+          <form method="post" action="/category/{{subcat}}">
+            <button name="button" value="{{categories[i]}}" type="submit">Add to Cart</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
 
 {% endblock %}
