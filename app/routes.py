@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 
 cart = []
+wishlist = []
 
 #######################################
 # Functions to interact with Database #
@@ -49,9 +50,11 @@ def check_img_extension(file_string):
 # Routing functions #
 #####################
 
+# Homepage
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def names():
+    # If user unregistered return to registration page
     if not current_user.is_authenticated:
         return redirect('/register')
     return render_template("index.html")
@@ -60,6 +63,7 @@ def names():
 @app.route('/register', methods=['GET', 'POST'])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # If user registered return to homepage
     if current_user.is_authenticated:
         return redirect('/index')
     return render_template('register.html')
@@ -67,6 +71,7 @@ def login():
 # Logging in
 @app.route('/loginform', methods=['GET', 'POST'])
 def login_form():
+    # If user registered return to homepage
     if current_user.is_authenticated:
         return redirect('/index')
     form = LoginForm()
@@ -86,9 +91,10 @@ def login_form():
         return redirect('/index')
     return render_template('login_form.html', form=form)
 
-# Registering
+# Registration page
 @app.route('/registrationform', methods=['GET', 'POST'])
 def registration_form():
+    # If user registered return to homepage
     if current_user.is_authenticated:
         return redirect('/index')
     form = RegistrationForm()
@@ -98,47 +104,57 @@ def registration_form():
         return redirect('/index')
     return render_template('registration_form.html', form=form)
 
+# Account page
 @app.route('/account', methods=['GET', 'POST'])
 @app.route('/account/<user>', methods = ['GET', 'SET'])
 def account(user=""):
+    # If user unregistered return to registration page
     if not current_user.is_authenticated:
         return redirect('/register')
     return render_template("account.html")
 
+# Orders page
 @app.route('/orders', methods=['GET', 'POST'])
 def orders():
+    # If user unregistered return to registration page
     if not current_user.is_authenticated:
         return redirect('/register')
     return render_template("orders.html")
 
-@app.route('/saved_items', methods=['GET', 'POST'])
+# Wishlist page
+@app.route('/wishlist', methods=['GET', 'POST'])
 def saveditems():
+    # If user unregistered return to registration page
     if not current_user.is_authenticated:
         return redirect('/register')
-    return render_template("saved_items.html")
+    return render_template("wishlist.html")
 
+# Settings page
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
+    # If user unregistered return to registration page
     if not current_user.is_authenticated:
         return redirect('/register')
     return render_template("settings.html")
 
+# Selling page
 @app.route('/selling', methods=['GET', 'POST'])
 def selling():
+    # If user unregistered return to registration page
     if not current_user.is_authenticated:
         return redirect('/register')
     return render_template("selling.html")
 
-@app.route('/category', methods=['GET'])
+# Category and subcategory pages
+@app.route('/category', methods=['GET', 'POST'])
 @app.route('/category/<type>', methods=['GET', 'POST'])
 def category(type=""):
+    item_ids, item_categories, file_names = [], [], []
+    count = 1
+    # If user unregistered return to registration page
     if not current_user.is_authenticated:
         return redirect('/register')
-    if type == "": # If category hasn't been selected yet
-        count = 1
-        item_ids = []
-        item_categories = []
-        file_names = []
+    if type == "": # If category unselected (base category page)
         for cat in Item.query.distinct(Item.category):
             if cat.category not in item_categories:
                 item_categories.append(cat.category)
@@ -152,8 +168,7 @@ def category(type=""):
                     file_names.append("static/img/items/" + str(count) + ext)
             count+=1
         return render_template("category.html", categories = item_categories, files = file_names)
-    else: # if category has been selected
-        count = 1
+    else: # if category selected (subcategory page)
         item_ids, file_names, items, item_price, item_quantity, item_categories = [], [], [], [], [], []
         type = str(type)
         for cat in Item.query.distinct(Item.category):
@@ -183,16 +198,23 @@ def category(type=""):
                             product[1] += 1
                     if contained == False:
                         cart.append([item_ids[item_count], 1])
+                elif request.form['button'] == str(item) + "-wishlist":
+                    # Checks each name in the database and matches the id
+                    for dbitem in Item.query.distinct(Item.name):
+                        if item == dbitem.name:
+                            # Checking if unique
+                            if dbitem.id not in wishlist:
+                                wishlist.append(dbitem.id)
+                                print(wishlist[-1])
                 item_count += 1
         return render_template("category_items.html", categories = items, files = file_names, quantity = item_quantity, price = item_price, subcat = type)
 
 # Checks out the user items
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
-    print("Checking out")
-    print(len(cart))
     basket, name, cost, stock, files, item_ids = [], [], [], [], [], []
-    total_cost = 0
+    total_cost = 0.
+    # If user unregistered return to registration page
     if not current_user.is_authenticated:
         return redirect('/register')
     # looping through the shopping cart [item ID][quantity requested]
@@ -227,8 +249,12 @@ def checkout():
             item_count += 1
     return render_template("checkout.html", basket = cart, name = name, cost = cost, stock = stock, files = files, value = total_cost)
 
+# Logout page
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
+    # If user unregistered return to registration page
+    if not current_user.is_authenticated:
+        return redirect('/register')
     print_to_console(str(current_user) + " Logged Out")
     logout_user()
     return redirect('/register')
