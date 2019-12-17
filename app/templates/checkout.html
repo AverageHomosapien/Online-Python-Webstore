@@ -20,7 +20,7 @@
         <div class="gallery-desc">
           <br>
           <b>Price:</b> £{{'%0.2f'%cost[i]}}<br><br>
-          <b>Quantity in Basket:</b> {{basket[i][1]}}<br><br>
+          <b>Quantity in Basket:</b> {{basket[i][1]}} (currently {{stock[i]}} in stock)<br><br>
           <b>Subtotal:</b> £{{'%0.2f' % (basket[i][1] * cost[i])}}<br><br>
           <form method="post" action="/checkout">
             <button name="button" value="{{name[i]}}" type="submit">Remove from Cart</button>

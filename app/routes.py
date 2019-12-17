@@ -186,12 +186,7 @@ def category(type=""):
                 item_count += 1
         return render_template("category_items.html", categories = items, files = file_names, quantity = item_quantity, price = item_price, subcat = type)
 
-@app.route('/basket', methods=['GET', 'POST'])
-def basket():
-    if not current_user.is_authenticated:
-        return redirect('/register')
-    return render_template("basket.html")
-
+# Checks out the user items
 @app.route('/checkout', methods=['GET', 'POST'])
 def checkout():
     print("Checking out")
@@ -200,9 +195,11 @@ def checkout():
     total_cost = 0
     if not current_user.is_authenticated:
         return redirect('/register')
+    # looping through the shopping cart [item ID][quantity requested]
     for item in cart:
         for db_item in Item.query.distinct(Item.id):
             if item[0] == db_item.id:
+                # Getting item IDs, name, cost and stock levels
                 item_ids.append(db_item.id)
                 name.append(db_item.name)
                 cost.append(db_item.amount)
@@ -215,6 +212,7 @@ def checkout():
                 break
     if request.method == 'POST':
         item_count = 0
+        total_cost = 0
         for item in name:
             if item == request.form['button']:
                 inner_count = 0
@@ -224,6 +222,7 @@ def checkout():
                     # Checking if there are no items ordered for product 1
                     if product[1] == 0:
                         cart.pop(inner_count)
+                    total_cost += (cost[inner_count] * product[1])
                     inner_count += 1
             item_count += 1
     return render_template("checkout.html", basket = cart, name = name, cost = cost, stock = stock, files = files, value = total_cost)
