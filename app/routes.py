@@ -127,7 +127,26 @@ def saveditems():
     # If user unregistered return to registration page
     if not current_user.is_authenticated:
         return redirect('/register')
-    return render_template("wishlist.html")
+    item_list, price_list, quantity_list = [], [], []
+
+    count = 1
+    # If user unregistered return to registration page
+    if not current_user.is_authenticated:
+        return redirect('/register')
+    if type == "": # If category unselected (base category page)
+        for cat in Item.query.distinct(Item.category):
+            if cat.category not in item_categories:
+                item_categories.append(cat.category)
+                item_ids.append(count)
+                dir = os.path.join(app.config['ITEM_FOLDER'], str(count))
+                ext = check_img_extension(dir)
+                if ext == "": # Remove from list
+                    item_categories.pop()
+                    item_ids.pop()
+                else:
+                    file_names.append("static/img/items/" + str(count) + ext)
+            count+=1
+    return render_template("wishlist.html", item_list = item_list, price = price_list, quantity = quantity_list)
 
 # Settings page
 @app.route('/settings', methods=['GET', 'POST'])

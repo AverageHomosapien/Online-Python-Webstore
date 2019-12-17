@@ -1,16 +1,32 @@
 {% extends "base.html" %}
 {% block content %}
 
-  <section id="hero">
-    <div class="hero-container">
-      <h1>Welcome to GIFTWRAP</h1>
-      <h2>The world's premier shopping site</h2>
-      <a href="/register" class="btn-get-started">Get Started</a>
+  <a class="category_return" href="/category"><i>Back to browsing Item Categories</i></a><br>
+  {% if item_list|length <= 0 %}
+  <div class="gallery-display">
+    <div class="gallery-desc">
+      I'm sorry but there are no items in your wishlist yet. Please return to browsing Item Categories to continue shopping.
     </div>
-  </section>
-  <main id="main">
-</main>
-</body>
-</html>
+  </div>
+  {% else %}
+    {% for i in range(item_list|length)%}
+      <div class="gallery-display">
+        <img src="{{files[i]}}">
+        <div class="gallery-desc">
+          <b>{{item_list[i]}}</b>
+        </div>
+        <hr>
+        <div class="gallery-desc">
+          <br>
+          <b>Price:</b> £{{'%0.2f'%price[i]}}<br><br>
+          <b>Quantity in Stock:</b> {{quantity[i]}}<br><br>
+          <form name="cart-form" method="post" action="/wishlist">
+            <button name="button" value="{{categories[i]}}" type="submit">Add to Cart</button>
+            <button name="button" value="{{categories[i]}}-wishlist" type="submit">Remove from Wishlist</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
 
 {% endblock %}
