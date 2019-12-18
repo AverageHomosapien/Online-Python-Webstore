@@ -21,8 +21,8 @@
           <b>Price:</b> £{{'%0.2f'%price[i]}}<br><br>
           <b>Quantity in Stock:</b> {{quantity[i]}}<br><br>
           <form name="cart-form" method="post" action="/wishlist">
-            <button name="button" value="{{categories[i]}}" type="submit">Add to Cart</button>
-            <button name="button" value="{{categories[i]}}-wishlist" type="submit">Remove from Wishlist</button>
+            <button name="button" value="{{item_list[i]}}" type="submit">Add to Cart</button>
+            <button name="button" value="{{item_list[i]}}-wishlist" type="submit">Remove from Wishlist</button>
           </form>
         </div>
       </div>

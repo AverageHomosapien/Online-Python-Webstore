@@ -123,30 +123,32 @@ def orders():
 
 # Wishlist page
 @app.route('/wishlist', methods=['GET', 'POST'])
-def saveditems():
+def wishlist_function():
     # If user unregistered return to registration page
     if not current_user.is_authenticated:
         return redirect('/register')
-    item_list, price_list, quantity_list = [], [], []
 
-    count = 1
-    # If user unregistered return to registration page
-    if not current_user.is_authenticated:
-        return redirect('/register')
-    if type == "": # If category unselected (base category page)
-        for cat in Item.query.distinct(Item.category):
-            if cat.category not in item_categories:
-                item_categories.append(cat.category)
-                item_ids.append(count)
-                dir = os.path.join(app.config['ITEM_FOLDER'], str(count))
-                ext = check_img_extension(dir)
-                if ext == "": # Remove from list
-                    item_categories.pop()
-                    item_ids.pop()
-                else:
-                    file_names.append("static/img/items/" + str(count) + ext)
-            count+=1
-    return render_template("wishlist.html", item_list = item_list, price = price_list, quantity = quantity_list)
+    if request.method == 'POST':
+        item_name_to_del = str(request.form['button'])
+        item_name_to_del = item_name_to_del[:-9] # Removing -wishlist from back of item
+        for cat in Item.query.distinct(Item.name):
+            if cat.name == item_name_to_del:
+                if cat.id in wishlist:
+                    wishlist.remove(cat.id)
+    item_list, price_list, quantity_list, file_names = [], [], [], []
+    for cat in Item.query.distinct(Item.id):
+        if cat.id in wishlist:
+            price_list.append(cat.amount)
+            quantity_list.append(cat.quantity)
+            item_list.append(cat.name)
+            dir = os.path.join(app.config['ITEM_FOLDER'], str(cat.id))
+            ext = check_img_extension(dir)
+            if ext == "": # Remove from list
+                item_categories.pop()
+                item_ids.pop()
+            else:
+                file_names.append("static/img/items/" + str(cat.id) + ext)
+    return render_template("wishlist.html", item_list = item_list, price = price_list, quantity = quantity_list, files = file_names)
 
 # Settings page
 @app.route('/settings', methods=['GET', 'POST'])
@@ -188,7 +190,7 @@ def category(type=""):
             count+=1
         return render_template("category.html", categories = item_categories, files = file_names)
     else: # if category selected (subcategory page)
-        item_ids, file_names, items, item_price, item_quantity, item_categories = [], [], [], [], [], []
+        item_price, item_quantity, items = [], [], []
         type = str(type)
         for cat in Item.query.distinct(Item.category):
             if cat.category == type:
@@ -206,6 +208,7 @@ def category(type=""):
                 else:
                     file_names.append("../static/img/items/" + str(count) + ext)
             count+=1
+        # Checking for post
         if request.method == 'POST':
             contained = False
             item_count = 0
@@ -224,7 +227,6 @@ def category(type=""):
                             # Checking if unique
                             if dbitem.id not in wishlist:
                                 wishlist.append(dbitem.id)
-                                print(wishlist[-1])
                 item_count += 1
         return render_template("category_items.html", categories = items, files = file_names, quantity = item_quantity, price = item_price, subcat = type)
 
