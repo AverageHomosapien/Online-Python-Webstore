@@ -1,0 +1,4 @@
+black borders around all item images - keep std across site
+checkout functionality
+  must update the stock number too
+search

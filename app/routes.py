@@ -127,20 +127,23 @@ def wishlist_function():
     # If user unregistered return to registration page
     if not current_user.is_authenticated:
         return redirect('/register')
-
+    # Checking for post
     if request.method == 'POST':
         item_name_to_del = str(request.form['button'])
-        item_name_to_del = item_name_to_del[:-9] # Removing -wishlist from back of item
+        item_name_to_del = item_name_to_del[:-9] # Removing -wishlist from back of item - comes as 'Football-wishlist'
         for cat in Item.query.distinct(Item.name):
+            # If DB item name matches page item
             if cat.name == item_name_to_del:
                 if cat.id in wishlist:
                     wishlist.remove(cat.id)
     item_list, price_list, quantity_list, file_names = [], [], [], []
+    # Checking through database for wishlist items based on ID
     for cat in Item.query.distinct(Item.id):
         if cat.id in wishlist:
             price_list.append(cat.amount)
             quantity_list.append(cat.quantity)
             item_list.append(cat.name)
+            # Checking for file extension
             dir = os.path.join(app.config['ITEM_FOLDER'], str(cat.id))
             ext = check_img_extension(dir)
             if ext == "": # Remove from list
@@ -180,6 +183,7 @@ def category(type=""):
             if cat.category not in item_categories:
                 item_categories.append(cat.category)
                 item_ids.append(count)
+                # Checking for file extension
                 dir = os.path.join(app.config['ITEM_FOLDER'], str(count))
                 ext = check_img_extension(dir)
                 if ext == "": # Remove from list
@@ -192,20 +196,23 @@ def category(type=""):
     else: # if category selected (subcategory page)
         item_price, item_quantity, items = [], [], []
         type = str(type)
+        # Checking through database by category to display category items
         for cat in Item.query.distinct(Item.category):
             if cat.category == type:
                 item_ids.append(count)
                 items.append(cat.name)
                 item_price.append(cat.amount)
                 item_quantity.append(cat.quantity)
+                # Checking for file extension
                 dir = os.path.join(app.config['ITEM_FOLDER'], str(count))
                 ext = check_img_extension(dir)
-                if ext == "": # Remove from list
+                # If the image doesn't exist
+                if ext == "":
                     item_categories.pop()
                     item_ids.pop()
                     item_price.pop()
                     item_quantity.pop()
-                else:
+                else: # If the image does exist and file extension has been found
                     file_names.append("../static/img/items/" + str(count) + ext)
             count+=1
         # Checking for post
@@ -215,9 +222,11 @@ def category(type=""):
             for item in items:
                 if item == request.form['button']:
                     for product in cart:
+                        # checking if product contained in cart
                         if item_ids[item_count] == product[0]:
                             contained = True
                             product[1] += 1
+                    # otherwise adding a new entry
                     if contained == False:
                         cart.append([item_ids[item_count], 1])
                 elif request.form['button'] == str(item) + "-wishlist":
@@ -247,27 +256,44 @@ def checkout():
                 name.append(db_item.name)
                 cost.append(db_item.amount)
                 stock.append(db_item.quantity)
+                # Checking for file extension
                 temp_fp = app.config['ITEM_FOLDER'] + "\\" + str(db_item.id)
                 string = check_img_extension(temp_fp)
                 fp = "static/img/items/" + str(db_item.id) + string
                 files.append(fp)
+                # Updating total cost
                 total_cost += (cost[-1] * item[1])
                 break
+    # If post method
     if request.method == 'POST':
         item_count = 0
         total_cost = 0
-        for item in name:
-            if item == request.form['button']:
-                inner_count = 0
-                for product in cart:
-                    if item_ids[item_count] == product[0]:
-                        product[1] -= 1
-                    # Checking if there are no items ordered for product 1
-                    if product[1] == 0:
-                        cart.pop(inner_count)
-                    total_cost += (cost[inner_count] * product[1])
-                    inner_count += 1
-            item_count += 1
+        button_type = "remove_item"
+        try:
+            if request.form.get('checkout-button') == "checkout":
+                button_type = "checkout"
+        finally:
+            if button_type == "remove_item":
+                for item in name:
+                    if item == request.form['button']:
+                        inner_count = 0
+                        for product in cart:
+                            if item_ids[item_count] == product[0]:
+                                product[1] -= 1
+                            # Checking if there are no items ordered for product 1
+                            if product[1] == 0:
+                                cart.pop(inner_count)
+                            total_cost += (cost[inner_count] * product[1])
+                            inner_count += 1
+                    item_count += 1
+            elif button_type == "checkout":
+                for cart_item in cart:
+                    for db_item in Item.query.distinct(Item.id):
+                        if cart_item[0] == db_item.id: # If item in cart matches database item
+                            db_item.quantity = db_item.quantity - cart_item[1]
+                db.session.commit() # Commit to the database
+                del cart[:] # Delete the cart's entire contents
+                return render_template('/index.html')
     return render_template("checkout.html", basket = cart, name = name, cost = cost, stock = stock, files = files, value = total_cost)
 
 # Logout page

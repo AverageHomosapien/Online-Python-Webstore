@@ -539,10 +539,9 @@ div.gallery-disc {
 }
 
 #checkout_text{
-  position: absolute;
-  padding-top: 30;
-}
-
-#checkout_text .text{
-  color: red;
+  position: relative;
+  float: left;
+  padding-top: 30px;
+  padding-left: 30px;
+  padding-bottom: 20px;
 }

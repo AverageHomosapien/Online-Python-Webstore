@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!-- basket [[]], name [], cost [], stock [], files [], value -->
   <a class="category_return" href="/category"><i>Back to browsing Item Categories</i></a><br>
   {% if basket|length <= 0 %}
   <div class="gallery-display">
@@ -28,9 +27,13 @@
         </div>
       </div>
     {% endfor %}
-    <hr>
     <div id="checkout_text">
-      <b>Cart Total:</b> £{{'%0.2f' % value}} <br>
+      <hr>
+      <b>Cart Total:</b> £{{'%0.2f' % value}} <br><br>
+      <form name="checkout-form" method="post" action="/checkout">
+        <button name="checkout-button" value="checkout" type="submit">Checkout Cart</button>
+      </form>
+      <hr>
     </div>
   {% endif %}
 
