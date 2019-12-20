@@ -24,9 +24,9 @@ def add_user(username, email, password, name, address):
         print_to_console(username + ") failed attempt to be added to the database")
 
 # Removes user from the database (untested)
-def remove_user(username):
+def remove_user(username, email, password, name, addresss):
     try:
-        u = User(username = 'John02', email = 'ginger@gmail.com', password_hash = 'dinkladd', name = 'Joseph Smith', address = '8 beach road')
+        u = User(username, email, password, name, addresss)
         db.session.query(u).delete()
         db.session.commit()
     except:
@@ -291,8 +291,12 @@ def checkout():
                     for db_item in Item.query.distinct(Item.id):
                         if cart_item[0] == db_item.id: # If item in cart matches database item
                             db_item.quantity = db_item.quantity - cart_item[1]
+                # order = Order(total_cost, datetime.utcnow().strftime("%a %b %d %H:%M:%S %Z %Y"))
+                # # Adding an order item for each order in the database
+                # for cart_item in cart:
+                #     order_item = OrderItem(order.id,cart_item[0], cart_item[1])
                 db.session.commit() # Commit to the database
-                del cart[:] # Delete the cart's entire contents
+                del cart[:] # Delete the cart's contents
                 return render_template('/index.html')
     return render_template("checkout.html", basket = cart, name = name, cost = cost, stock = stock, files = files, value = total_cost)
 
