@@ -153,22 +153,6 @@ def wishlist_function():
                 file_names.append("static/img/items/" + str(cat.id) + ext)
     return render_template("wishlist.html", item_list = item_list, price = price_list, quantity = quantity_list, files = file_names)
 
-# Settings page
-@app.route('/settings', methods=['GET', 'POST'])
-def settings():
-    # If user unregistered return to registration page
-    if not current_user.is_authenticated:
-        return redirect('/register')
-    return render_template("settings.html")
-
-# Selling page
-@app.route('/selling', methods=['GET', 'POST'])
-def selling():
-    # If user unregistered return to registration page
-    if not current_user.is_authenticated:
-        return redirect('/register')
-    return render_template("selling.html")
-
 # Category and subcategory pages
 @app.route('/category', methods=['GET', 'POST'])
 @app.route('/category/<type>', methods=['GET', 'POST'])
