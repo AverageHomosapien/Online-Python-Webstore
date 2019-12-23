@@ -241,9 +241,9 @@ def checkout():
                 cost.append(db_item.amount)
                 stock.append(db_item.quantity)
                 # Checking for file extension
-                temp_fp = app.config['ITEM_FOLDER'] + "\\" + str(db_item.id)
-                string = check_img_extension(temp_fp)
-                fp = "static/img/items/" + str(db_item.id) + string
+                temp_fp = os.path.join(app.config['ITEM_FOLDER'], str(db_item.id))
+                ext = check_img_extension(temp_fp)
+                fp = "static/img/items/" + str(db_item.id) + ext
                 files.append(fp)
                 # Updating total cost
                 total_cost += (cost[-1] * item[1])
